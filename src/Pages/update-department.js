@@ -3,11 +3,11 @@ import Header from "./header";
 import Sidebar from "./sidebar";
 import { Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-function AddCity(){
+function UpdateDepartment(){
     return(
         <div>
             <Helmet>
-                    <title>HRMS | Add City</title>
+                    <title>HRMS | Update Department</title>
                 </Helmet>
             {/* eslint-disable jsx-a11y/anchor-is-valid */}
             {/*eslint no-script-url: 2*/}
@@ -19,12 +19,12 @@ function AddCity(){
                         <div className="row">
                             <div className="col-12">
                                 <div className="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 className="mb-0 font-size-18">Add City</h4>
+                                    <h4 className="mb-0 font-size-18">Update Department</h4>
 
                                     <div className="page-title-right">
                                         <ol className="breadcrumb m-0">
-                                            <li className="breadcrumb-item"><a href="#">Manage Cities</a></li>
-                                            <li className="breadcrumb-item active">Add City</li>
+                                            <li className="breadcrumb-item"><a href="#">Manage Departments</a></li>
+                                            <li className="breadcrumb-item active">Update Department</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -36,31 +36,39 @@ function AddCity(){
                             <div className="col-lg-8">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4 className="card-title mb-4">Add new City</h4>
+                                        <h4 className="card-title mb-4">Update Department</h4>
                                         <div className="text-sm-right">
-                                            <Link to="/ViewCities" className="btn btn-sm btn btn-warning w-md">View Cities</Link>
+                                            <Link to="/ViewDepartments" className="btn btn-sm btn btn-warning w-md">View Departments</Link>
                                         </div>
                                         <form>
                                             <div className="row">
-                                                <div className="col-sm-6">
+                                                <div className="col-sm-8">
                                                     <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">City name</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input"/>
+                                                        <label htmlFor="formrow-firstname-input">Department name</label> 
+                                                        <input type="text" className="form-control" id="formrow-firstname-input" value="HR"/>
                                                     </div>
                                                 </div>
-                                                <div className="col-sm-6">
-                                                <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">State</label>
+                                                <div className="col-sm-4">
+                                                    <div className="form-group">
+                                                        <label htmlFor="formrow-firstname-input">City</label>
                                                         <select className="form-control">
-                                                            <option>--Select State--</option>
-                                                            <option>Gujarat</option>
-                                                            <option>Maharashtra</option>
+                                                            <option>--Select City--</option>
+                                                            <option selected>Surat</option>
+                                                            <option>Mumbai</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="row">
+                                                <div className="col-sm-12">
+                                                    <div className="form-group">
+                                                        <label htmlFor="formrow-firstname-input">Department Address</label>
+                                                        <textarea className="form-control" id="formrow-firstname-input">J.p. Dawer Institute of Information Science & Technology, Veer Narmad South Gujarat University, Udhna-Magdalla Road, 395005</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Add</button>
+                                                <button type="submit" className="btn btn-primary w-md">Update</button>
                                             </div>
                                         </form>
                                     </div>
@@ -90,4 +98,4 @@ function AddCity(){
     );
 }
 
-export default AddCity;
+export default UpdateDepartment;

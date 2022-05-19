@@ -41,7 +41,7 @@ function AddState(){
                                         </div>
                                         <form>
                                             <div className="form-group">
-                                                <label for="formrow-firstname-input">State name</label>
+                                                <label htmlFor="formrow-firstname-input">State name</label>
                                                 <input type="text" className="form-control" id="formrow-firstname-input"/>
                                             </div>
                                             <div>

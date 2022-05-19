@@ -3,11 +3,11 @@ import Header from "./header";
 import Sidebar from "./sidebar";
 import { Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-function AddCity(){
+function AddDeduction(){
     return(
         <div>
             <Helmet>
-                    <title>HRMS | Add City</title>
+                    <title>HRMS | Add Deduction</title>
                 </Helmet>
             {/* eslint-disable jsx-a11y/anchor-is-valid */}
             {/*eslint no-script-url: 2*/}
@@ -19,12 +19,12 @@ function AddCity(){
                         <div className="row">
                             <div className="col-12">
                                 <div className="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 className="mb-0 font-size-18">Add City</h4>
+                                    <h4 className="mb-0 font-size-18">Add Deduction</h4>
 
                                     <div className="page-title-right">
                                         <ol className="breadcrumb m-0">
-                                            <li className="breadcrumb-item"><a href="#">Manage Cities</a></li>
-                                            <li className="breadcrumb-item active">Add City</li>
+                                            <li className="breadcrumb-item"><a href="#">Manage Deductions</a></li>
+                                            <li className="breadcrumb-item active">Add Deduction</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -36,25 +36,25 @@ function AddCity(){
                             <div className="col-lg-8">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4 className="card-title mb-4">Add new City</h4>
+                                        <h4 className="card-title mb-4">Add new Deduction</h4>
                                         <div className="text-sm-right">
-                                            <Link to="/ViewCities" className="btn btn-sm btn btn-warning w-md">View Cities</Link>
+                                            <Link to="/ViewDeductions" className="btn btn-sm btn btn-warning w-md">View Deductions</Link>
                                         </div>
                                         <form>
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">City name</label>
+                                                        <label htmlFor="formrow-firstname-input">Deduction name</label>
                                                         <input type="text" className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">State</label>
+                                                    <div className="form-group">
+                                                        <label htmlFor="formrow-firstname-input">Deduction type</label>
                                                         <select className="form-control">
-                                                            <option>--Select State--</option>
-                                                            <option>Gujarat</option>
-                                                            <option>Maharashtra</option>
+                                                            <option>--Select--</option>
+                                                            <option>Other</option>
+                                                            <option>Tax</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -90,4 +90,4 @@ function AddCity(){
     );
 }
 
-export default AddCity;
+export default AddDeduction;

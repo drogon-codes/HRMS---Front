@@ -57,7 +57,7 @@ function ViewCities(){
                                                     <td>Surat</td>
                                                     <td>Gujarat</td>
                                                     <td>
-                                                        <button type="button" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</button>&emsp;
+                                                        <Link to="/UpdateCity" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
                                                         <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
                                                     </td>
                                                 </tr>
