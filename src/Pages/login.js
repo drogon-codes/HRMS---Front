@@ -1,7 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React,{useState} from "react";
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from "axios";
+
 function Auth(){
+    const initialInputState = { employeeEmail: "" , password:""};
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+    let navigate = useNavigate();
+    const {employeeEmail} = eachEntry;
+    const{password} = eachEntry2;
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({...eachEntry2,[e.target.name]: e.target.value});
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        debugger;
+        const data = {employeeEmail:eachEntry.employeeEmail, password:eachEntry2.password}
+        axios.post(process.env.REACT_APP_API+"EmployeeAPI/Login",data).then(navigate("/Dashboard"));
+        console.log(eachEntry);
+        console.log(eachEntry2);
+      };
+
+    console.log(eachEntry);
         return(<div>
             <Helmet>
                     <title>HRMS | Login</title>
@@ -40,13 +63,13 @@ function Auth(){
                                     <form class="form-horizontal" action="https://themesbrand.com/skote/layouts/index.html">
         
                                         <div class="form-group">
-                                            <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" placeholder="Enter username"/>
+                                            <label for="employeeEmail">Email Address</label>
+                                            <input type="text" class="form-control" name="employeeEmail" onChange={handleInputChange} value={employeeEmail} id="employeeEmail" placeholder="Enter employeeEmail"/>
                                         </div>
                 
                                         <div class="form-group">
                                             <label for="userpassword">Password</label>
-                                            <input type="password" class="form-control" id="userpassword" placeholder="Enter password"/>
+                                            <input type="password" class="form-control" name="password" onChange={handleInputChange} value={password} id="userpassword" placeholder="Enter password"/>
                                         </div>
                 
                                         {/* <div class="custom-control custom-checkbox">
@@ -55,7 +78,7 @@ function Auth(){
                                         </div> */}
                                         
                                         <div class="mt-3">
-                                            <Link className="btn btn-primary btn-block waves-effect waves-light" to="/Dashboard">Log In</Link>
+                                            <button className="btn btn-primary btn-block waves-effect waves-light"onClick={handleFinalSubmit}>Log In</button>
                                         </div>
                                     </form>
                                 </div>

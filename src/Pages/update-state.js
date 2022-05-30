@@ -1,9 +1,39 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate, useParams} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from "axios";
 function UpdateState(){
+    const params = useParams();
+    console.log(params);
+    const initialInputState = { stateId:parseInt(0),stateName: "" };
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [showLoading, setShowLoading] = useState(false);
+    let navigate = useNavigate();
+    const {stateName} = eachEntry;
+    const {stateId} = params.id;
+    useEffect(() => {  
+        const GetData = async () => {  
+          const result = await axios(process.env.REACT_APP_API+"StateAPI/"+params.id);  
+          setEachEntry(result.data);  
+          console.log(result.data);
+        };  
+        GetData();  
+      }, []);
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        // debugger;
+        const data = {stateId:parseInt(params.id), stateName:eachEntry.stateName}
+        axios.put(process.env.REACT_APP_API+"StateAPI/"+params.id,data).then(navigate("/ViewStates"));
+        console.log(eachEntry);
+      };
+
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
@@ -35,17 +65,17 @@ function UpdateState(){
                             <div className="col-lg-8">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4 className="card-title mb-4">Update State</h4>
+                                        <h4 className="card-title mb-4">Update new State</h4>
                                         <div className="text-sm-right">
                                             <Link to="/ViewStates" className="btn btn-sm btn btn-warning w-md">View States</Link>
                                         </div>
                                         <form>
                                             <div className="form-group">
-                                                <label htmlFor="formrow-firstname-input" >State name</label>
-                                                <input type="text" className="form-control" value="Gujarat" id="formrow-firstname-input"/>
+                                                <label htmlFor="formrow-firstname-input">State name</label>
+                                                <input type="text" className="form-control" name="stateName"  onChange={handleInputChange} value={stateName} id="formrow-firstname-input"/>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Update</button>
+                                                <button onClick={handleFinalSubmit} className="btn btn-primary w-md">Update</button>
                                             </div>
                                         </form>
                                     </div>

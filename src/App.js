@@ -1,5 +1,5 @@
 import Auth from './Pages/login';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Dashboard from './Pages/dashboard';
 import AddState from './Pages/add-state';
 import ViewState from './Pages/view-states';
@@ -32,6 +32,10 @@ import UpdateGradeHR from './Pages/update-hrgrade';
 import AddEmployee from './Pages/add-employee';
 import ViewEmployees from './Pages/view-employees';
 import UpdateEmployee from './Pages/update-employee';
+import ViewLeaves from './Pages/view-leaves';
+import ViewAttendance from './Pages/view-attendance';
+import ViewPromotions from './Pages/view-promotions';
+import ViewSalary from './Pages/view-salary';
 // import logo from './logo.svg';
 // import './App.css';
 function App() {
@@ -45,7 +49,7 @@ function App() {
         {/* States */}
         <Route path="/AddState" element={<AddState />} />
         <Route path="/ViewStates" element={<ViewState/>}/>
-        <Route path="/UpdateState" element={<UpdateState/>}/>
+        <Route path="/UpdateState/:id" element={<UpdateState/>}/>
         {/* Cities */}
         <Route path="/AddCity" element={<AddCity/>}/>
         <Route path="/ViewCities" element={<ViewCities/>}/>
@@ -84,6 +88,15 @@ function App() {
         <Route path="/AddEmployee" element={<AddEmployee/>}/>
         <Route path="/ViewEmployees" element={<ViewEmployees/>}/>
         <Route path='/UpdateEmployee' element={<UpdateEmployee/>}/>
+        {/* Leaves */} 
+        <Route path="/ViewLeaves" element={<ViewLeaves/>}/>
+        {/* Attendance */} 
+        <Route path="/ViewAttendance" element={<ViewAttendance/>}/>
+        {/* Promotions */}
+        <Route path="/ViewPromotions" element={<ViewPromotions/>}/>
+        {/* Salary */}
+        <Route path="/ViewSalaries" element={<ViewSalary/>}/>
+        
       </Routes>
     </div>
   );

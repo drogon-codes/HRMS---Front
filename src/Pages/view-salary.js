@@ -3,11 +3,11 @@ import Header from "./header";
 import Sidebar from "./sidebar";
 import {Route, Link} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-function ViewEmployees(){
+function ViewSalary(){
     return(
         <div>
             <Helmet>
-                    <title>HRMS | View Employees</title>
+                    <title>HRMS | View Salary</title>
                 </Helmet>
             {/* eslint-disable jsx-a11y/anchor-is-valid */}
             <Header/>
@@ -20,12 +20,12 @@ function ViewEmployees(){
                         <div className="row">
                             <div className="col-12">
                                 <div className="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 className="mb-0 font-size-18">View Employees</h4>
+                                    <h4 className="mb-0 font-size-18">View Salary</h4>
 
                                     <div className="page-title-right">
                                         <ol className="breadcrumb m-0">
-                                            <li className="breadcrumb-item"><a href="javascript: void(0);">Employees</a></li>
-                                            <li className="breadcrumb-item active">View Employees</li>
+                                            <li className="breadcrumb-item"><a href="javascript: void(0);">Salary</a></li>
+                                            <li className="breadcrumb-item active">View Salary</li>
                                         </ol>
                                     </div>
 
@@ -37,38 +37,36 @@ function ViewEmployees(){
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4 className="card-title">All Employees</h4>
-                                        <div class="text-right">
-                                            <Link to="/AddEmployee" class="btn btn-dark waves-effect waves-light">Add Employee</Link>
-                                        </div>
+                                        <h4 className="card-title">All Salary</h4>
+                                        {/* <div class="text-right">
+                                            <Link to="/AddEmployee" class="btn btn-dark waves-effect waves-light">Add Salary</Link>
+                                        </div> */}
                                         <br/>
                                         <table id="datatable" className="table table-bordered dt-responsive nowrap" style={{borderCollapse: "collapse",borderSpacing: "0",width: "100%"}}>
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Employee Name</th>
-                                                <th>Email</th>
-                                                <th>Contact</th>
-                                                <th>Grade</th>
-                                                <th>Designation</th>
-                                                <th>Department</th>
-                                                <th>Actions</th>
+                                                <th>Employee</th>
+                                                <th>Date of Embursement</th>
+                                                <th>Basic</th>
+                                                <th>Allowances</th> {/*Iterable*/}
+                                                <th>Gross Salary</th>
+                                                <th>Deductions</th> {/*Iterable*/}
+                                                <th>Net(Total) Salary</th>
+                                                <th>Payment ID</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>1</td>
-                                                    <td>Someshchandra Hemabhai Lathiya</td>
-                                                    <td>soms3443@gmail.com</td>
-                                                    <td>+918527419630</td>
-                                                    <td>O</td>
-                                                    <td>Manager</td>
-                                                    <td>HR</td>
-                                                    <td>
-                                                        <Link to="/UpdateEmployee" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <Link to="/EmployeeDetails" className="btn btn-outline-success btn btn-sm waves-effect waves-light">Details</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
-                                                    </td>
+                                                    <td>Someshchandra Hemabhai Lathiya - 145260</td>
+                                                    <td>31-04-2022</td>
+                                                    <td>25500</td>
+                                                    <td>DA - 5500</td>
+                                                    <td>31500</td>
+                                                    <td>PF - 1500</td>
+                                                    <td>30000</td>
+                                                    <td>rzp-145hjdk114820</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -98,4 +96,4 @@ function ViewEmployees(){
     );
 }
 
-export default ViewEmployees;
+export default ViewSalary;

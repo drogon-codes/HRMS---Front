@@ -1,9 +1,28 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-function ViewStates(){
+import Axios from 'axios'; 
+function ViewStates(prop){
+
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        // debugger;  
+        Axios  
+            .get(process.env.REACT_APP_API+"StateAPI")  
+            .then(result => setData(result.data));  
+        // debugger;  
+    } );
+
+    const deleteState = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"StateAPI/" + id).then(navigate("/ViewStates"));  
+        };
+    const editState = (id) => {  
+        navigate("/UpdateState/"+id);  
+        }; 
     return(
         <div>
             <Helmet>
@@ -38,8 +57,8 @@ function ViewStates(){
                                 <div className="card">
                                     <div className="card-body">
                                         <h4 className="card-title">All States</h4>
-                                        <div class="text-right">
-                                            <Link to="/AddState" class="btn btn-dark waves-effect waves-light">Add State</Link>
+                                        <div className="text-right">
+                                            <Link to="/AddState" className="btn btn-dark waves-effect waves-light">Add State</Link>
                                         </div>
                                         <br/>
                                         <table id="datatable" className="table table-bordered dt-responsive nowrap" style={{borderCollapse: "collapse",borderSpacing: "0",width: "100%"}}>
@@ -51,14 +70,16 @@ function ViewStates(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Gujarat</td>
-                                                    <td>
-                                                        <Link to="/UpdateState" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
-                                                    </td>
-                                                </tr>
+                                            {data.map(item => {  
+                                                    return <tr key={item.stateId}>  
+                                                        <td>{item.stateId}</td>
+                                                        <td>{item.stateName}</td>  
+                                                        <td>
+                                                            <button to="/UpdateState" className="btn btn-outline-primary btn btn-sm waves-effect waves-light"onClick={() => { editState(item.stateId) }}>Edit</button>&emsp;
+                                                            <button type="button" className="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteState(item.stateId) }}>Delete</button>
+                                                        </td>
+                                                    </tr>  
+                                                })}  
                                             </tbody>
                                         </table>
         

@@ -1,9 +1,29 @@
-import React from "react";
+import React,{useState} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from "axios";
 function AddState(){
+    const initialInputState = { stateName: "" };
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [showLoading, setShowLoading] = useState(false);
+    let navigate = useNavigate();
+    const {stateName} = eachEntry;
+
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        debugger;
+        const data = {stateName:eachEntry.stateName}
+        axios.post(process.env.REACT_APP_API+"StateAPI",data).then(navigate("/ViewStates"));
+        console.log(eachEntry);
+      };
+
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
@@ -42,10 +62,10 @@ function AddState(){
                                         <form>
                                             <div className="form-group">
                                                 <label htmlFor="formrow-firstname-input">State name</label>
-                                                <input type="text" className="form-control" id="formrow-firstname-input"/>
+                                                <input type="text" className="form-control" name="stateName"  onChange={handleInputChange} value={stateName} id="formrow-firstname-input"/>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Add</button>
+                                                <button onClick={handleFinalSubmit} className="btn btn-primary w-md">Add</button>
                                             </div>
                                         </form>
                                     </div>
