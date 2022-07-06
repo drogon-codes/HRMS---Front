@@ -1,9 +1,26 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
+import Moment from 'moment';
 function ViewHolidays(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"HolidayAPI")  
+            .then(result => setData(result.data));  
+    } );
+    const deleteHoliday = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"HolidayAPI/" + id).then(navigate("/ViewHolidays"));  
+        };
+    
+    const editHoliday = (id) => {  
+        navigate("/UpdateHoliday/"+id);  
+        }; 
     return(
         <div>
             <Helmet>
@@ -52,15 +69,17 @@ function ViewHolidays(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Gandhi Jayanti</td>
-                                                    <td>10-02-2022</td>
+                                                {data.map((item, i=1) => {  
+                                                 return <tr>
+                                                    <td>{++i}</td>
+                                                    <td>{item.holidayTitle}</td>
+                                                    <td>{Moment(item.holidayDate).format('DD/MM/YYYY')}</td>
                                                     <td>
-                                                        <Link to="/UpdateHoliday" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => {editHoliday(item.holidayId)}}>Edit</button>&emsp;
+                                                        <button class="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteHoliday(item.holidayId) }}>Delete</button>
                                                     </td>
                                                 </tr>
+                                                })}
                                             </tbody>
                                         </table>
                                     </div>

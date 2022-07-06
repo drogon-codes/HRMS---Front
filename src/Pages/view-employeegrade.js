@@ -4,19 +4,31 @@ import Sidebar from "./sidebar";
 import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Axios from 'axios'; 
-function ViewAttendance(){
+function ViewEmployeeGrade(){
     const [data, setData] = useState([]);  
     let navigate = useNavigate();
     useEffect(() => {  
         Axios  
-            .get(process.env.REACT_APP_API+"AttendanceAPI")  
+            .get(process.env.REACT_APP_API+"EmployeeAPI/AllEmployees")  
             .then(result => setData(result.data));  
-            console.log(data);
-    },[] );
+    } );
+
+    const deleteGradeEmployee = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"EmployeeGradeAPI/" + id).then(navigate("/ViewEmployeeGrade"));  
+        };
+
+    const editGradeEmployee = (id) => {  
+        navigate("/UpdateEmployeeGrade/"+id);  
+        }; 
+
+    const promoteEmployee = (id) => {  
+        navigate("/AddPromotion/"+id);  
+        }; 
     return(
         <div>
             <Helmet>
-                    <title>HRMS | View Attendance</title>
+                    <title>HRMS | View Graded Employees</title>
                 </Helmet>
             {/* eslint-disable jsx-a11y/anchor-is-valid */}
             <Header/>
@@ -29,12 +41,12 @@ function ViewAttendance(){
                         <div className="row">
                             <div className="col-12">
                                 <div className="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 className="mb-0 font-size-18">View Attendance</h4>
+                                    <h4 className="mb-0 font-size-18">View Graded Employees</h4>
 
                                     <div className="page-title-right">
                                         <ol className="breadcrumb m-0">
-                                            <li className="breadcrumb-item"><a href="javascript: void(0);">Attendance</a></li>
-                                            <li className="breadcrumb-item active">View Attendance</li>
+                                            <li className="breadcrumb-item"><a href="javascript: void(0);">Graded Employees</a></li>
+                                            <li className="breadcrumb-item active">View Graded Employees</li>
                                         </ol>
                                     </div>
 
@@ -46,35 +58,42 @@ function ViewAttendance(){
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4 className="card-title">All Attendance</h4>
-                                        {/* <div class="text-right">
-                                            <Link to="/AddEmployee" class="btn btn-dark waves-effect waves-light">Add Attendance</Link>
-                                        </div> */}
+                                        <h4 className="card-title">All Graded Employees</h4>
+                                        <div class="text-right">
+                                            <Link to="/AddEmployeeGrade" class="btn btn-dark waves-effect waves-light">Assign Grade</Link>
+                                        </div>
                                         <br/>
                                         <table id="datatable" className="table table-bordered dt-responsive nowrap" style={{borderCollapse: "collapse",borderSpacing: "0",width: "100%"}}>
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Employee</th>
-                                                <th>Time of Arrival</th>
-                                                <th>Time of Leave</th>
-                                                <th>Overtime Hours</th>
-                                                <th>Date</th>
+                                                <th>Employee Id</th>
+                                                <th>Employee Name</th>
+                                                <th>Grade</th>
+                                                <th>Designation</th>
+                                                <th>Department</th>
+                                                <th>Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {data.map((item, i=1) => {  
-                                                    return<tr key={item.attendanceId}>
+                                                {data.map((item, i=1) => {  
+                                                    return<tr key={item.employeeGradeId}>
                                                     <td>{++i}</td>
                                                     <td>{item.employeeId}</td>
-                                                    <td>{item.timeOfArrival.value.hours}:{item.timeOfArrival.value.minutes}:{item.timeOfArrival.value.seconds}</td>
-                                                    <td>{item.timeOfLeave.value.hours}:{item.timeOfLeave.value.minutes}:{item.timeOfLeave.value.seconds}</td>
-                                                    <td>{item.overTimeHours}</td>
-                                                    <td>{item.attendanceDate}</td>
+                                                    <td>{item.employeeFname} {item.employeeMname} {item.employeeLname}</td>
+                                                    <td>{item.gradeName}</td>
+                                                    <td>{item.designation}</td>
+                                                    <td>{item.department}</td>
+                                                    <td>
+                                                        <button className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => { editGradeEmployee(item.employeeGradeId) }}>Edit</button>&emsp;
+                                                        {/* <button className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => { editGradeEmployee(item.employeeGradeId) }}>Promote</button>&emsp; */}
+                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteGradeEmployee(item.employeeGradeId) }}>Delete</button>
+                                                    </td>
                                                 </tr>
-                                            })}
+                                                  })}
                                             </tbody>
                                         </table>
+        
                                     </div>
                                 </div>
                             </div>
@@ -82,6 +101,7 @@ function ViewAttendance(){
                     </div> 
                 </div>
 
+                
                 <footer className="footer">
                     <div className="container-fluid">
                         <div className="row">
@@ -101,4 +121,4 @@ function ViewAttendance(){
     );
 }
 
-export default ViewAttendance;
+export default ViewEmployeeGrade;

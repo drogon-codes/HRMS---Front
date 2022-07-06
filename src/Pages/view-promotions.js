@@ -38,9 +38,9 @@ function ViewPromotions(){
                                 <div className="card">
                                     <div className="card-body">
                                         <h4 className="card-title">All Promotions</h4>
-                                        {/* <div class="text-right">
-                                            <Link to="/AddEmployee" class="btn btn-dark waves-effect waves-light">Add Promotions</Link>
-                                        </div> */}
+                                        <div class="text-right">
+                                            <Link to="/AddPromotion" class="btn btn-dark waves-effect waves-light">Add Promotions</Link>
+                                        </div>
                                         <br/>
                                         <table id="datatable" className="table table-bordered dt-responsive nowrap" style={{borderCollapse: "collapse",borderSpacing: "0",width: "100%"}}>
                                             <thead>

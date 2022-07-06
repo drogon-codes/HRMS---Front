@@ -1,9 +1,45 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from "axios";
+import Moment from 'moment';
 function UpdateHoliday(){
+    const params = useParams();
+    let navigate = useNavigate();
+
+    const initialInputState = { holidayId: parseInt(0), holidayTitle: "", holidayDate: ""};
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+
+    const {holidayTitle} = eachEntry;
+    const {holidayDate} = eachEntry2;
+
+    useEffect(() => {  
+        const GetData = async () => {  
+          const result = await axios(process.env.REACT_APP_API+"HolidayAPI/"+params.id);  
+          setEachEntry(result.data);
+          setEachEntry2(result.data);
+          console.log(result.data);
+        };  
+        GetData();  
+      }, []);
+
+      const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({ ...eachEntry2, [e.target.name]: e.target.value });
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        debugger;
+        const data = {holidayId:parseInt(params.id), holidayTitle:eachEntry.holidayTitle, holidayDate:eachEntry2.holidayDate}
+        axios.put(process.env.REACT_APP_API+"HolidayAPI/"+params.id,data).then(navigate("/ViewHolidays"));
+        console.log(eachEntry);
+      };
+
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
@@ -45,18 +81,18 @@ function UpdateHoliday(){
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Holiday name</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input" value="Gandhi Jayanti"/>
+                                                        <input type="text" name="holidayTitle" onChange={handleInputChange} value={holidayTitle} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Date of Holiday</label>
-                                                        <input type="date" className="form-control" id="formrow-firstname-input" value="2022-10-02"/>
+                                                        <input type="date" name="holidayDate" onChange={handleInputChange} value={Moment(holidayDate).format('YYYY-MM-DD')} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Update</button>
+                                            <button type="button" onClick={handleFinalSubmit} className="btn btn-primary w-md">Update</button>
                                             </div>
                                         </form>
                                     </div>

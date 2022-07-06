@@ -1,9 +1,26 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function ViewGrades(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"GradeAPI")  
+            .then(result => setData(result.data));  
+    } );
+
+    const deleteGrade = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"GradeAPI/" + id).then(navigate("/ViewGrades"));  
+        };
+
+    const editGrade = (id) => {  
+        navigate("/UpdateGrade/"+id);  
+        }; 
     return(
         <div>
             <Helmet>
@@ -47,7 +64,6 @@ function ViewGrades(){
                                             <tr>
                                                 <th>#</th>
                                                 <th>Grade Name</th>
-                                                <th>Department</th>
                                                 <th>Mode of Salary</th>
                                                 <th>Wage per Hour</th>
                                                 <th>Daily Salary</th>
@@ -55,18 +71,19 @@ function ViewGrades(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>O</td>
-                                                    <td>HR</td>
-                                                    <td>Daily</td>
-                                                    <td>-</td>
-                                                    <td>850.75</td>
+                                            {data.map((item, i=1) => {  
+                                                    return<tr key={item.gradeId}>
+                                                    <td>{++i}</td>
+                                                    <td>{item.gradeName}</td>
+                                                    <td>{item.modeOfSalary}</td>
+                                                    <td>{item.wagePerHour==0 ? '-' : item.wagePerHour}</td>
+                                                    <td>{item.dailySalary==0 ? '-' : item.dailySalary}</td>
                                                     <td>
-                                                        <Link to="/UpdateGrade" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button type="button" className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => { editGrade(item.gradeId) }}>Edit</button>&emsp;
+                                                        <button type="button" className="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteGrade(item.gradeId) }}>Delete</button>
                                                     </td>
                                                 </tr>
+                                            })}
                                             </tbody>
                                         </table>
                                     </div>

@@ -3,29 +3,41 @@ import Header from "./header";
 import Sidebar from "./sidebar";
 import {Route, Link, useNavigate, useParams} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import axios from "axios";
-function UpdateAllowance(){
-    const [data, setData] = useState([]);  
+import Axios from 'axios'; 
+function AddPromotion(){
+    const [empData, setEmpData] = useState([]);  
+    const [gradeData, setGradeData] = useState([]);  
     let navigate = useNavigate();
     const params = useParams();
-    console.log(params);
+    const GetEmpData = () =>{
+        Axios  
+        .get(process.env.REACT_APP_API+"EmployeeAPI/AllEmployees")  
+        .then(result => setEmpData(result.data));  
+    }
 
-    const initialInputState = { allowanceId:parseInt(0), allowanceName: "", isTaxable: "" };
-    const [eachEntry, setEachEntry] = useState(initialInputState);
-    const [eachEntry2, setEachEntry2] = useState(initialInputState);
-
-    const {allowanceName} = eachEntry;
-    const {isTaxable} = eachEntry2;
-
+    const GetGradeData = () =>{
+        Axios  
+        .get(process.env.REACT_APP_API+"GradeAPI")  
+        .then(result => setGradeData(result.data));  
+    }
     useEffect(() => {  
         const GetData = async () => {  
-          const result = await axios(process.env.REACT_APP_API+"AllowanceAPI/"+params.id);  
-          setEachEntry(result.data);
-          setEachEntry2(result.data);
-          console.log(result.data);
-        };  
-        GetData();  
-      }, []);
+            const result = await Axios(process.env.REACT_APP_API+"EmployeeGradeAPI/"+params.id);  
+            setEachEntry(result.data);
+            setEachEntry2(result.data);
+            console.log(result.data);
+            };  
+       GetData();
+       GetEmpData();
+       GetGradeData();
+    },[] );
+
+    const initialInputState = { employeeGradeId: parseInt(0), employeeId: parseInt(0), gradeId: parseInt(0), isActive: "" };
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+    
+    const {employeeId} = eachEntry;
+    const {gradeId} = eachEntry2;
 
     const handleInputChange = e => {
         setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
@@ -35,14 +47,16 @@ function UpdateAllowance(){
     const handleFinalSubmit = e => {
         e.preventDefault();
         // debugger;
-        const data = {allowanceId:parseInt(params.id), allowanceName:eachEntry.allowanceName, isTaxable:eachEntry2.isTaxable}
-        axios.put(process.env.REACT_APP_API+"AllowanceAPI/"+params.id,data).then(navigate("/ViewAllowances"));
+        const data = {employeeGradeId: parseInt(params.id), employeeId:parseInt(eachEntry.employeeId), gradeId:parseInt(eachEntry2.gradeId), isActive: "Y"}
+        Axios.put(process.env.REACT_APP_API+"EmployeeGradeAPI/"+params.id,data).then(navigate("/ViewEmployeeGrade"));
         console.log(eachEntry);
-    };
+      };
+
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
-                    <title>HRMS | Update Allowance</title>
+                    <title>HRMS | Promote Employee</title>
                 </Helmet>
             {/* eslint-disable jsx-a11y/anchor-is-valid */}
             {/*eslint no-script-url: 2*/}
@@ -54,12 +68,12 @@ function UpdateAllowance(){
                         <div className="row">
                             <div className="col-12">
                                 <div className="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 className="mb-0 font-size-18">Update Allowance</h4>
+                                    <h4 className="mb-0 font-size-18">Promote Employee</h4>
 
                                     <div className="page-title-right">
                                         <ol className="breadcrumb m-0">
-                                            <li className="breadcrumb-item"><a href="#">Manage Allowances</a></li>
-                                            <li className="breadcrumb-item active">Update Allowance</li>
+                                            <li className="breadcrumb-item"><a href="#">Manage Cities</a></li>
+                                            <li className="breadcrumb-item active">Promote Employee</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -71,31 +85,37 @@ function UpdateAllowance(){
                             <div className="col-lg-8">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4 className="card-title mb-4">Update Allowance</h4>
+                                        <h4 className="card-title mb-4">Update Grade to New Employee</h4>
                                         <div className="text-sm-right">
-                                            <Link to="/ViewAllowances" className="btn btn-sm btn btn-warning w-md">View Allowances</Link>
+                                            <Link to="/ViewCities" className="btn btn-sm btn btn-warning w-md">View Cities</Link>
                                         </div>
                                         <form>
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">Allowance name</label>
-                                                        <input type="text" name="allowanceName" value={allowanceName} onChange={handleInputChange} className="form-control" id="formrow-firstname-input"/>
+                                                        <label htmlFor="formrow-firstname-input">Employee</label>
+                                                        <select className="form-control" onChange={handleInputChange} value={employeeId} name="employeeId">
+                                                            <option>--Select Employee--</option>
+                                                            {empData.map(item => {  
+                                                                return <option value={item.employeeId}>{item.employeeId} - {item.employeeFname} {item.employeeMname} {item.employeeLname}</option>
+                                                            })}  
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">Is Taxable?</label>
-                                                        <select name="isTaxable" value={isTaxable} onChange={handleInputChange} className="form-control">
-                                                            <option>--Select--</option>
-                                                            <option value={"Yes"}>Yes</option>
-                                                            <option value={"No"}>No</option>
+                                                <div className="form-group">
+                                                        <label htmlFor="formrow-firstname-input">Grade</label>
+                                                        <select className="form-control" onChange={handleInputChange} value={gradeId} name="gradeId">
+                                                            <option>--Select Grade--</option>
+                                                            {gradeData.map(item => {  
+                                                                return <option value={item.gradeId}>{item.gradeName}</option>
+                                                            })}  
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="button" onClick={handleFinalSubmit} className="btn btn-primary w-md">Update</button>
+                                                <button onClick={handleFinalSubmit} className="btn btn-primary w-md">Update</button>
                                             </div>
                                         </form>
                                     </div>
@@ -125,4 +145,4 @@ function UpdateAllowance(){
     );
 }
 
-export default UpdateAllowance;
+export default AddPromotion;

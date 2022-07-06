@@ -1,9 +1,31 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function ViewEmployees(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        // debugger;  
+        Axios  
+            .get(process.env.REACT_APP_API+"EmployeeAPI")  
+            .then(result => setData(result.data));  
+        // debugger;  
+    } );
+    const deleteEmployee = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"EmployeeAPI/" + id).then(navigate("/ViewEmployees"));  
+    };
+
+    const editEmployee = (id) => {  
+        navigate("/UpdateEmployee/"+id);  
+    };
+
+    const employeeDetails = (id) => {  
+        navigate("/EmployeeDetails/"+id);  
+    };    
     return(
         <div>
             <Helmet>
@@ -46,30 +68,28 @@ function ViewEmployees(){
                                             <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Employee ID</th>
                                                 <th>Employee Name</th>
                                                 <th>Email</th>
                                                 <th>Contact</th>
-                                                <th>Grade</th>
-                                                <th>Designation</th>
-                                                <th>Department</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Someshchandra Hemabhai Lathiya</td>
-                                                    <td>soms3443@gmail.com</td>
-                                                    <td>+918527419630</td>
-                                                    <td>O</td>
-                                                    <td>Manager</td>
-                                                    <td>HR</td>
+                                            {data.map((item, i=1) => {  
+                                                return <tr key={item.employeeId}>
+                                                    <td>{++i}</td>
+                                                    <td>{item.employeeId}</td>
+                                                    <td>{item.employeeFname} {item.employeeMname} {item.employeeLname}</td>
+                                                    <td>{item.employeeEmail}</td>
+                                                    <td>+91{item.employeeContact}</td>
                                                     <td>
-                                                        <Link to="/UpdateEmployee" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
+                                                    <button type="button" className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => {editEmployee(item.employeeId)}} >Edit</button>&emsp;
                                                         <Link to="/EmployeeDetails" className="btn btn-outline-success btn btn-sm waves-effect waves-light">Details</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button type="button" className="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteEmployee(item.employeeId) }}>Delete</button>
                                                     </td>
                                                 </tr>
+                                            })}
                                             </tbody>
                                         </table>
                                     </div>

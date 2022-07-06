@@ -1,9 +1,39 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function AddCity(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"StateAPI")  
+            .then(result => setData(result.data));  
+    } );
+
+    const initialInputState = { cityName: "", stateId: parseInt(0) };
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+    
+    const {cityName} = eachEntry;
+    const {stateId} = eachEntry2;
+
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({...eachEntry2,[e.target.name]: e.target.value});
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        // debugger;
+        const data = {cityName:eachEntry.cityName, stateId:parseInt(eachEntry2.stateId)}
+        Axios.post(process.env.REACT_APP_API+"CityAPI",data).then(navigate("/ViewCities"));
+        console.log(eachEntry);
+      };
+
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
@@ -45,22 +75,23 @@ function AddCity(){
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">City name</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input"/>
+                                                        <input type="text" name="cityName" onChange={handleInputChange} value={cityName} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                 <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">State</label>
-                                                        <select className="form-control">
+                                                        <select className="form-control" onChange={handleInputChange} value={stateId} name="stateId">
                                                             <option>--Select State--</option>
-                                                            <option>Gujarat</option>
-                                                            <option>Maharashtra</option>
+                                                            {data.map(item => {  
+                                                                return <option value={item.stateId}>{item.stateName}</option>
+                                                            })}  
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Add</button>
+                                                <button onClick={handleFinalSubmit} className="btn btn-primary w-md">Add</button>
                                             </div>
                                         </form>
                                     </div>

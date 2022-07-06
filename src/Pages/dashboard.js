@@ -1,9 +1,34 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function Dashboard() {
+    const [empData, setEmpData] = useState([]);
+    const [desData, setDesData] = useState([]);
+    const [gradeData, setGradeData] = useState([]);
+    var totEmp = 0, totDes = 0, totGrade = 0;
+    const getAllDesignations = () => {
+        Axios  
+        .get(process.env.REACT_APP_API+"DesignationAPI")  
+        .then(result => {setDesData(result.data);})
+    }
+    const getAllEmployees = () => {
+        Axios  
+        .get(process.env.REACT_APP_API+"EmployeeAPI")  
+            .then(result => setEmpData(result.data)); 
+    }
+    const getAllGrades = () => {
+        Axios  
+        .get(process.env.REACT_APP_API+"GradeAPI")  
+            .then(result => setGradeData(result.data)); 
+    }
+    useEffect(() => {  
+        getAllDesignations();
+        getAllEmployees();
+        getAllGrades();
+    } );
         return (
             <div>
                 <Helmet>
@@ -20,7 +45,7 @@ function Dashboard() {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="page-title-box d-flex align-items-center justify-content-between">
-                                        <h4 className="mb-0 font-size-18">HRMS Admin/HR Dashboard</h4>
+                                        <h4 className="mb-0 font-size-18">HRMS {sessionStorage.getItem("userType")} Dashboard</h4>
 
                                         <div className="page-title-right">
                                             <ol className="breadcrumb m-0">
@@ -46,8 +71,8 @@ function Dashboard() {
                                                         <div className="media-body align-self-center">
                                                             <div className="text-muted">
                                                                 <p className="mb-2">Welcome to HRMS Dashboard</p>
-                                                                <h5 className="mb-1">Admin(name will come here)</h5>
-                                                                <p className="mb-0">Organization Designer / Human Resource Manager</p>
+                                                                <h5 className="mb-1">{sessionStorage.getItem("userName")}</h5>
+                                                                <p className="mb-0">{sessionStorage.getItem("userType")}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -59,19 +84,28 @@ function Dashboard() {
                                                             <div className="col-4">
                                                                 <div>
                                                                     <p className="text-muted text-truncate mb-2">Total Employees</p>
-                                                                    <h5 className="mb-0">48</h5>
+                                                                    {empData.map((item) => { 
+                                                                    totEmp = totEmp + 1
+                                                                    })}
+                                                                    <h5 className="mb-0">{totEmp}</h5>
                                                                 </div>
                                                             </div>
                                                             <div className="col-4">
                                                                 <div>
                                                                     <p className="text-muted text-truncate mb-2">Designations</p>
-                                                                    <h5 className="mb-0">40</h5>
+                                                                    {desData.map((item) => { 
+                                                                    totDes = totDes + 1
+                                                                    })}
+                                                                    <h5 className="mb-0">{totDes}</h5>
                                                                 </div>
                                                             </div>
                                                             <div className="col-4">
                                                                 <div>
                                                                     <p className="text-muted text-truncate mb-2">Vacent Grades</p>
-                                                                    <h5 className="mb-0">18</h5>
+                                                                    {gradeData.map((item) => { 
+                                                                    totGrade = totGrade + 1
+                                                                    })}
+                                                                    <h5 className="mb-0">{totGrade}</h5>
 
                                                                 </div>
                                                             </div>
@@ -171,7 +205,7 @@ function Dashboard() {
                                 </div>
                             </div>
 
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col-xl-8">
                                     <div className="card">
                                         <div className="card-body">
@@ -765,7 +799,7 @@ function Dashboard() {
                                     </div>
                                 </div>
 
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>

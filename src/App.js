@@ -1,5 +1,5 @@
 import Auth from './Pages/login';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, BrowserRouter, useNavigate } from 'react-router-dom';
 import Dashboard from './Pages/dashboard';
 import AddState from './Pages/add-state';
 import ViewState from './Pages/view-states';
@@ -36,14 +36,25 @@ import ViewLeaves from './Pages/view-leaves';
 import ViewAttendance from './Pages/view-attendance';
 import ViewPromotions from './Pages/view-promotions';
 import ViewSalary from './Pages/view-salary';
+import ViewEmployeeGrade from './Pages/view-employeegrade';
+import AddEmployeeGrade from './Pages/add-employeegrade';
+import UpdateEmployeeGrade from './Pages/update-employeegrade';
+import AddSalary from './Pages/add-salary';
+import ViewGradeDetails from './Pages/view-hrgradedetail';
+import Salary from './Pages/salary';
+import AddPromotion from './Pages/add-promotion';
 // import logo from './logo.svg';
 // import './App.css';
 function App() {
+  let navigate = useNavigate();
   return (
     <div className='App'>
       <Routes>
         {/* Auth and Dashboard */}
         <Route path="/" element={<Auth />} />
+      </Routes>
+      {sessionStorage.getItem("isLogin")=="Yes" ? 
+      <Routes>
         <Route path="/Dashboard" element={<Dashboard />} />
         {/* OD Routes */}
         {/* States */}
@@ -53,51 +64,62 @@ function App() {
         {/* Cities */}
         <Route path="/AddCity" element={<AddCity/>}/>
         <Route path="/ViewCities" element={<ViewCities/>}/>
-        <Route path="/UpdateCity" element={<UpdateCity/>}/>
+        <Route path="/UpdateCity/:id" element={<UpdateCity/>}/>
         {/* Holidays */}
         <Route path="/AddHoliday" element={<AddHoliday/>}/>
         <Route path="/ViewHolidays" element={<ViewHolidays/>}/>
-        <Route path='/UpdateHoliday' element={<UpdateHoliday/>}/>
+        <Route path='/UpdateHoliday/:id' element={<UpdateHoliday/>}/>
         {/* Departments */}
         <Route path="/AddDepartment" element={<AddDepartment/>}/>
         <Route path="/ViewDepartments" element={<ViewDepartments/>}/>
-        <Route path='/UpdateDepartment' element={<UpdateDepartment/>}/>
+        <Route path='/UpdateDepartment/:id' element={<UpdateDepartment/>}/>
         {/* Designations */}
         <Route path="/AddDesignation" element={<AddDesignation/>}/>
         <Route path="/ViewDesignations" element={<ViewDesignations/>}/>
-        <Route path='/UpdateDesignation' element={<UpdateDesignation/>}/>
+        <Route path='/UpdateDesignation/:id' element={<UpdateDesignation/>}/>
         {/* Grades */}
         <Route path="/AddGrade" element={<AddGrade/>}/>
         <Route path="/ViewGrades" element={<ViewGrades/>}/>
-        <Route path='/UpdateGrade' element={<UpdateGrade/>}/>
+        <Route path='/UpdateGrade/:id' element={<UpdateGrade/>}/>
         {/* Allowances */}
         <Route path="/AddAllowance" element={<AddAllowance/>}/>
         <Route path="/ViewAllowances" element={<ViewAllowances/>}/>
-        <Route path='/UpdateAllowance' element={<UpdateAllowance/>}/>
+        <Route path='/UpdateAllowance/:id' element={<UpdateAllowance/>}/>
         {/* Deductions */}
         <Route path="/AddDeduction" element={<AddDeduction/>}/>
         <Route path="/ViewDeductions" element={<ViewDeductions/>}/>
-        <Route path='/UpdateDeduction' element={<UpdateDeduction/>}/>
+        <Route path='/UpdateDeduction/:id' element={<UpdateDeduction/>}/>
 
         {/* HR Routes */}
         {/* Grades */}
         <Route path="/AddGradeHR" element={<AddGradeHR/>}/>
         <Route path="/ViewGradesHR" element={<ViewGradesHR/>}/>
-        <Route path='/UpdateGradeHR' element={<UpdateGradeHR/>}/>
+        <Route path='/UpdateGradeHR/:gradeId/:desId/:allId/:dedId' element={<UpdateGradeHR/>}/>
+        <Route path='/ViewGradeDetails/:gradeId' element={<ViewGradeDetails/>}/>
+        
         {/* Employees */}
-        <Route path="/AddEmployee" element={<AddEmployee/>}/>
         <Route path="/ViewEmployees" element={<ViewEmployees/>}/>
-        <Route path='/UpdateEmployee' element={<UpdateEmployee/>}/>
-        {/* Leaves */} 
+        <Route path="/AddEmployee" element={<AddEmployee/>}/>
+        <Route path="/UpdateEmployee/:id" element={<UpdateEmployee/>}/>
+
+        <Route path="/ViewEmployeeGrade" element={<ViewEmployeeGrade/>}/>
+        <Route path="/AddEmployeeGrade" element={<AddEmployeeGrade/>}/>
+        <Route path="/UpdateEmployeeGrade/:id" element={<UpdateEmployeeGrade/>}/>
+
         <Route path="/ViewLeaves" element={<ViewLeaves/>}/>
         {/* Attendance */} 
         <Route path="/ViewAttendance" element={<ViewAttendance/>}/>
         {/* Promotions */}
         <Route path="/ViewPromotions" element={<ViewPromotions/>}/>
+        <Route path="/AddPromotion/:id" element={<AddPromotion/>}/>
         {/* Salary */}
         <Route path="/ViewSalaries" element={<ViewSalary/>}/>
-        
+        <Route path="/AddSalary" element={<AddSalary/>}/>
+        <Route path="/Salary/:employeeId" element={<Salary/>}/>
       </Routes>
+      :
+      alert("Please Login")
+      }
     </div>
   );
 }

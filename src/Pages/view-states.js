@@ -19,10 +19,11 @@ function ViewStates(prop){
     const deleteState = (id) => {  
         // debugger;  
         Axios.delete(process.env.REACT_APP_API+"StateAPI/" + id).then(navigate("/ViewStates"));  
-        };
+    };
+
     const editState = (id) => {  
         navigate("/UpdateState/"+id);  
-        }; 
+    }; 
     return(
         <div>
             <Helmet>
@@ -70,12 +71,12 @@ function ViewStates(prop){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {data.map(item => {  
+                                            {data.map((item, i=1) => {  
                                                     return <tr key={item.stateId}>  
-                                                        <td>{item.stateId}</td>
+                                                        <td>{++i}</td>
                                                         <td>{item.stateName}</td>  
                                                         <td>
-                                                            <button to="/UpdateState" className="btn btn-outline-primary btn btn-sm waves-effect waves-light"onClick={() => { editState(item.stateId) }}>Edit</button>&emsp;
+                                                            <button className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => { editState(item.stateId) }}>Edit</button>&emsp;
                                                             <button type="button" className="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteState(item.stateId) }}>Delete</button>
                                                         </td>
                                                     </tr>  

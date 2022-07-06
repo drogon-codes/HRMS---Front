@@ -7,7 +7,7 @@ function Sidebar(){
                     <div data-simplebar className="h-100">
 
                         <div id="sidebar-menu" align="left">
-                            {/* OD Menus */}
+                            {sessionStorage.getItem("userType")=='OD'?
                             <ul className="metismenu list-unstyled" id="side-menu">
                                 <li className="menu-title" key="t-menu">Organization Designer Tools</li>
 
@@ -60,8 +60,8 @@ function Sidebar(){
                                     </Link>
                                 </li>
                             </ul>
-
-                            {/* HRM Menus */}
+                            :
+                            
                             <ul className="metismenu list-unstyled" id="side-menu">
                                 <li className="menu-title" key="t-menu">Human Resource Tools</li>
 
@@ -78,6 +78,12 @@ function Sidebar(){
                                     </Link>
                                 </li>
                                 <li>
+                                    <Link to="/ViewEmployeeGrade" className="waves-effect">
+                                        <i className="bx bx-briefcase-alt-2"></i>
+                                        <span key="t-dashboards">Employee Grades</span>
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link to="/ViewLeaves" className="waves-effect">
                                         <i className="bx bx-calendar"></i>
                                         <span key="t-dashboards">Leaves</span>
@@ -89,25 +95,26 @@ function Sidebar(){
                                         <span key="t-dashboards">Attendance</span>
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link to="/ViewPromotions" className="waves-effect">
                                         <i className="bx bx-upvote"></i>
                                         <span key="t-dashboards">Promotions</span>
                                     </Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     <Link to="/ViewSalaries" className="waves-effect">
                                         <i className="bx bx-rupee"></i>
                                         <span key="t-dashboards">Salary</span>
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link to="/Reports" className="waves-effect">
                                         <i className="bx bx-grid-alt"></i>
                                         <span key="t-dashboards">Reports</span>
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
+                            }
                         </div>
                     </div>
                 </div>

@@ -1,9 +1,51 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate, useParams} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from "axios";
 function UpdateCity(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        axios  
+            .get(process.env.REACT_APP_API+"StateAPI")  
+            .then(result => setData(result.data));  
+    } );
+    
+    const params = useParams();
+    console.log(params);
+    const initialInputState = { cityId: parseInt(0), cityName: "", stateId: parseInt(0) };
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+    
+    const {cityId} = params.id;
+    const {cityName} = eachEntry;
+    const {stateId} = eachEntry2;
+
+    useEffect(() => {  
+        const GetData = async () => {  
+          const result = await axios(process.env.REACT_APP_API+"CityAPI/"+params.id);  
+          setEachEntry(result.data);
+          setEachEntry2(result.data);
+          console.log(result.data);
+        };  
+        GetData();  
+      }, []);
+
+      const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({ ...eachEntry2, [e.target.name]: e.target.value });
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        // debugger;
+        const data = {cityId:parseInt(params.id), cityName:eachEntry.cityName, stateId:parseInt(eachEntry2.stateId)}
+        axios.put(process.env.REACT_APP_API+"CityAPI/"+params.id,data).then(navigate("/ViewCities"));
+        console.log(eachEntry);
+      };
+
     return(
         <div>
             <Helmet>
@@ -45,22 +87,23 @@ function UpdateCity(){
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">City name</label>
-                                                        <input type="text" className="form-control" value="Surat" id="formrow-firstname-input"/>
+                                                        <input type="text" className="form-control" onChange={handleInputChange} name="cityName" value={cityName} id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                 <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">State</label>
-                                                        <select className="form-control">
+                                                        <select className="form-control" onChange={handleInputChange} value={stateId} name="stateId">
                                                             <option>--Select State--</option>
-                                                            <option selected>Gujarat</option>
-                                                            <option>Maharashtra</option>
+                                                            {data.map(item => {  
+                                                                return <option value={item.stateId}>{item.stateName}</option>
+                                                            })}  
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Update</button>
+                                                <button type="button" onClick={handleFinalSubmit} className="btn btn-primary w-md">Update</button>
                                             </div>
                                         </form>
                                     </div>

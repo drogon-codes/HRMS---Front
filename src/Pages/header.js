@@ -1,6 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Header(){
+    let navigate = useNavigate();
+
+    const logout = () =>{
+        window.sessionStorage.clear();
+        navigate('/');
+    };
         return(
             <div>
                 {/* eslint-disable jsx-a11y/anchor-is-valid */}
@@ -77,7 +83,7 @@ function Header(){
                                 <a className="dropdown-item d-block" href="#"><span className="badge badge-success float-right">11</span><i className="bx bx-wrench font-size-16 align-middle mr-1"></i> <span key="t-settings">Settings</span></a>
                                 <a className="dropdown-item" href="#"><i className="bx bx-lock-open font-size-16 align-middle mr-1"></i> <span key="t-lock-screen">Lock screen</span></a> */}
                                 {/* <div className="dropdown-divider"></div> */}
-                                <Link className="dropdown-item text-danger" to="/"><i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> <span key="t-logout">Logout</span></Link>
+                                <button className="dropdown-item text-danger" onClick={logout}><i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> <span key="t-logout">Logout</span></button>
                             </div>
                         </div>
                     </div>

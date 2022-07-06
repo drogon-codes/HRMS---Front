@@ -1,9 +1,42 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function AddDepartment(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"CityAPI")  
+            .then(result => setData(result.data));  
+    });
+
+    const initialInputState = { departmentName: "", cityId: parseInt(0), departmentAddress: ""};
+
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+    const [eachEntry3, setEachEntry3] = useState(initialInputState);
+
+    const {departmentName} = eachEntry;
+    const {cityId} = eachEntry2;
+    const {departmentAddress} = eachEntry3;
+
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({...eachEntry2,[e.target.name]: e.target.value});
+        setEachEntry3({...eachEntry3,[e.target.name]: e.target.value});
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        // debugger;
+        const data = {departmentName:eachEntry.departmentName, cityId:parseInt(eachEntry2.cityId), departmentAddress:eachEntry3.departmentAddress}
+        Axios.post(process.env.REACT_APP_API+"DepartmentAPI",data).then(navigate("/ViewDepartments"));
+        console.log(eachEntry);
+      };
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
@@ -45,16 +78,17 @@ function AddDepartment(){
                                                 <div className="col-sm-8">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Department name</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input"/>
+                                                        <input type="text" onChange={handleInputChange} name="departmentName" value={departmentName} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-4">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">City</label>
-                                                        <select className="form-control">
+                                                        <select className="form-control" onChange={handleInputChange} name="cityId" value={cityId}>
                                                             <option>--Select City--</option>
-                                                            <option>Surat</option>
-                                                            <option>Mumbai</option>
+                                                            {data.map(item => {  
+                                                                return <option value={item.cityId}>{item.cityName}</option>
+                                                            })}  
                                                         </select>
                                                     </div>
                                                 </div>
@@ -63,12 +97,12 @@ function AddDepartment(){
                                                 <div className="col-sm-12">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Department Address</label>
-                                                        <textarea className="form-control" id="formrow-firstname-input"></textarea>
+                                                        <textarea className="form-control" onChange={handleInputChange} name="departmentAddress" value={departmentAddress} id="formrow-firstname-input"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Add</button>
+                                                <button onClick={handleFinalSubmit} className="btn btn-primary w-md">Add</button>
                                             </div>
                                         </form>
                                     </div>

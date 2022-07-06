@@ -1,9 +1,28 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function ViewDepartments(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        // debugger;  
+        Axios  
+            .get(process.env.REACT_APP_API+"DepartmentAPI")  
+            .then(result => setData(result.data));  
+        // debugger;  
+    } );
+
+    const deleteDepartment = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"DepartmentAPI/" + id).then(navigate("/ViewDepartments"));  
+    };
+
+    const editDepartment = (id) => {  
+        navigate("/UpdateDepartment/"+id);  
+    }; 
     return(
         <div>
             <Helmet>
@@ -53,16 +72,18 @@ function ViewDepartments(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>HR</td>
-                                                    <td>Surat</td>
-                                                    <td>J.p. Dawer Institute of Information Science & Technology, Veer Narmad South Gujarat University, Udhna-Magdalla Road, 395005</td>
+                                            {data.map((item, i=1) => {  
+                                                return <tr key={item.departmentId}>
+                                                    <td>{++i}</td>
+                                                    <td>{item.departmentName}</td>
+                                                    <td>{item.cityName}</td>
+                                                    <td>{item.departmentAddress}</td>
                                                     <td>
-                                                        <Link to="/UpdateDepartment" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button type="button" className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => { editDepartment(item.departmentId) }}>Edit</button>&emsp;
+                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteDepartment(item.departmentId) }}>Delete</button>
                                                     </td>
                                                 </tr>
+                                            })}
                                             </tbody>
                                         </table>
                                     </div>

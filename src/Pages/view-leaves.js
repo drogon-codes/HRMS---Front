@@ -1,9 +1,19 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios';
 function ViewLeaves(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        // debugger;  
+        Axios  
+            .get(process.env.REACT_APP_API+"LeaveAPI")  
+            .then(result => setData(result.data));  
+        // debugger;  
+    } );
     return(
         <div>
             <Helmet>
@@ -53,13 +63,15 @@ function ViewLeaves(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Someshchandra Hemabhai Lathiya - 145260</td>
-                                                    <td>31/12/2022</td>
-                                                    <td>05/01/2023</td>
-                                                    <td>Maternity</td>
+                                            {data.map((item, i=1) => {  
+                                                return <tr>
+                                                    <td>{++i}</td>
+                                                    <td>{item.employeeId}</td>
+                                                    <td>{item.fromDate}</td>
+                                                    <td>{item.toDate}</td>
+                                                    <td>{item.reason}</td>
                                                 </tr>
+                                                 })}
                                             </tbody>
                                         </table>
                                     </div>

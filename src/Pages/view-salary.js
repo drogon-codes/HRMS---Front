@@ -38,9 +38,9 @@ function ViewSalary(){
                                 <div className="card">
                                     <div className="card-body">
                                         <h4 className="card-title">All Salary</h4>
-                                        {/* <div class="text-right">
-                                            <Link to="/AddEmployee" class="btn btn-dark waves-effect waves-light">Add Salary</Link>
-                                        </div> */}
+                                        <div class="text-right">
+                                            <Link to="/AddSalary" class="btn btn-dark waves-effect waves-light">Add Salary</Link>
+                                        </div>
                                         <br/>
                                         <table id="datatable" className="table table-bordered dt-responsive nowrap" style={{borderCollapse: "collapse",borderSpacing: "0",width: "100%"}}>
                                             <thead>

@@ -1,9 +1,30 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function ViewGradesHR(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"GradeAPI/HrGrade")  
+            .then(result => setData(result.data));  
+    } );
+
+    const deleteHrGrade = (designationGradeId, allowanceGradeId, deductionGradId) => {  
+        // debugger;  GradeAPI/HrGrade/7/7/7
+        Axios.delete(process.env.REACT_APP_API+"GradeAPI/HrGrade/"+designationGradeId+"/"+allowanceGradeId+"/"+deductionGradId).then(navigate("/ViewGradesHR"));  
+    };
+
+    const editHrGrade = (gradeId, desId, allId, dedId) => {  
+        navigate("/UpdateGradeHR/"+gradeId+"/"+desId+"/"+allId+"/"+dedId);  
+    };
+
+    const viewHrGrade = (gradeId) => {  
+        navigate("/ViewGradeDetails/"+gradeId);  
+    };
     return(
         <div>
             <Helmet>
@@ -48,26 +69,24 @@ function ViewGradesHR(){
                                             <tr>
                                                 <th>#</th>
                                                 <th>Grade Name</th>
-                                                <th>Department</th>
-                                                <th>Designation</th>
-                                                <th>Allowance - Rate</th>
-                                                <th>Deduction - Rate</th>
+                                                <th>Mode of Payment - Amount</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>O</td>
-                                                    <td>HR</td>
-                                                    <td>Manager</td>
-                                                    <td>DA - 5.75%</td>
-                                                    <td>PF - 15.04%</td>
+                                            {data.map((item, i=1) => {  
+                                                    return <tr>
+                                                    <td>{++i}</td>
+                                                    <td>{item.gradeName}</td>
+                                                    <td>{item.wagePerHour=='0'?"Daily - ":"Wage Per Hour - "}{item.wagePerHour=='0'?item.dailySalary:item.wagePerHour}</td>
+                                                    {/* <td>{item.designationGradeId},{item.allowanceGradeId},{item.deductionGradId}</td> */}
                                                     <td>
-                                                        <Link to="/UpdateGradeHR" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button type="button" onClick={() => { viewHrGrade(item.gradeId) }} className="btn btn-outline-success btn btn-sm waves-effect waves-light">View</button>&emsp;
+                                                        {/* <button type="button" onClick={() => { editHrGrade(item.gradeId, item.designationGradeId, item.allowanceGradeId, item.deductionGradId) }} className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</button>&emsp;
+                                                        <button type="button" onClick={() => { deleteHrGrade(item.designationGradeId, item.allowanceGradeId, item.deductionGradId) }} class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button> */}
                                                     </td>
                                                 </tr>
+                                            })}
                                             </tbody>
                                         </table>
                                     </div>

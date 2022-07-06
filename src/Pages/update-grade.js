@@ -1,9 +1,39 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from "axios";
+import Moment from 'moment';
 function UpdateGrade(){
+    const params = useParams();
+    let navigate = useNavigate();
+
+    const initialInputState = { gradeId: parseInt(0), gradeName: "", modeOfSalary: "", wagePerHour: parseFloat(0), dailySalary: parseFloat(0)};
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+    const [eachEntry3, setEachEntry3] = useState(initialInputState);
+    
+    const {gradeName} = eachEntry;
+    const {modeOfSalary} = eachEntry2;
+    const {amountOfPayment} = eachEntry3;
+    useEffect(() => {  
+        const GetData = async () => {  
+          const result = await axios(process.env.REACT_APP_API+"GradeAPI/"+params.id);  
+          setEachEntry(result.data);
+          setEachEntry2(result.data);
+          setEachEntry3(result.data);
+          console.log(result.data);
+        };  
+        GetData();  
+      }, []);
+
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({...eachEntry2,[e.target.name]: e.target.value});
+        setEachEntry3({...eachEntry3,[e.target.name]: e.target.value});
+        // setEachEntry4({...eachEntry4,[e.target.name]: e.target.value});
+    };
     return(
         <div>
             <Helmet>
@@ -42,47 +72,47 @@ function UpdateGrade(){
                                         </div>
                                         <form>
                                             <div className="row">
-                                                <div className="col-sm-6">
+                                                <div className="col-sm-12">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Grade name</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input" value="O"/>
+                                                        <input type="text" name="gradeName" value={gradeName} onChange={handleInputChange} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
-                                                <div className="col-sm-6">
+                                                {/* <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Department</label>
                                                         <select className="form-control">
                                                             <option>--Select Department--</option>
-                                                            <option selected>HR</option>
-                                                            <option>Manufaturing</option>
+                                                            <option>HR</option>
+                                                            <option>Manufacturing</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                                <div className="col-sm-4">
+                                                </div> */}
+                                                <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Mode Of Salary</label>
-                                                        <select className="form-control">
+                                                        <select className="form-control" name="modeOfSalary" value={modeOfSalary} onChange={handleInputChange}>
                                                             <option>--Select Mode--</option>
-                                                            <option selected>Daily</option>
-                                                            <option>Hourly</option>
+                                                            <option value={"Daily"}>Daily</option>
+                                                            <option value={"Hourly"}>Hourly</option>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="col-sm-4">
+                                                <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label htmlFor="formrow-firstname-input">Wage per Hour</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input"/>
+                                                        <label htmlFor="formrow-firstname-input">Amount of Payment</label>
+                                                        <input type="text" name="amountOfPayment" value={amountOfPayment} onChange={handleInputChange} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
-                                                <div className="col-sm-4">
+                                                {/* <div className="col-sm-4">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Daily Salary</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input" value="850.75"/>
+                                                        <input type="text" name="dailySalary" value={dailySalary} onChange={handleInputChange} className="form-control" id="formrow-firstname-input"/>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Update</button>
+                                                <button type="button"  className="btn btn-primary w-md">Add</button>
                                             </div>
                                         </form>
                                     </div>

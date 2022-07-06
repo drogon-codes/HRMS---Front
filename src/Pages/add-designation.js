@@ -1,9 +1,39 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import { Route, Link } from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function AddDesignation(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"DepartmentAPI")  
+            .then(result => setData(result.data));  
+    } );
+
+    const initialInputState = { designationName: "", departmentId: parseInt(0) };
+    const [eachEntry, setEachEntry] = useState(initialInputState);
+    const [eachEntry2, setEachEntry2] = useState(initialInputState);
+
+    const {designationName} = eachEntry;
+    const {departmentId} = eachEntry2;
+
+    const handleInputChange = e => {
+        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+        setEachEntry2({...eachEntry2,[e.target.name]: e.target.value});
+    };
+
+    const handleFinalSubmit = e => {
+        e.preventDefault();
+        // debugger;
+        const data = {designationName:eachEntry.designationName, departmentId:parseInt(eachEntry2.departmentId)}
+        Axios.post(process.env.REACT_APP_API+"DesignationAPI",data).then(navigate("/ViewDesignations"));
+        console.log(eachEntry);
+      };
+
+    console.log(eachEntry);
     return(
         <div>
             <Helmet>
@@ -45,22 +75,23 @@ function AddDesignation(){
                                                 <div className="col-sm-8">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Designation name</label>
-                                                        <input type="text" className="form-control" id="formrow-firstname-input"/>
+                                                        <input name="designationName" value={designationName} onChange={handleInputChange} type="text" className="form-control" id="formrow-firstname-input"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-4">
                                                     <div className="form-group">
                                                         <label htmlFor="formrow-firstname-input">Department</label>
-                                                        <select className="form-control">
-                                                            <option>--Select Department--</option>
-                                                            <option>HR</option>
-                                                            <option>Manufacturing</option>
+                                                        <select name="departmentId" value={departmentId} onChange={handleInputChange} className="form-control">
+                                                        <option>--Select Department--</option>
+                                                            {data.map(item => {  
+                                                                return <option value={item.departmentId}>{item.departmentName}</option>
+                                                            })} 
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" className="btn btn-primary w-md">Add</button>
+                                                <button type="button" onClick={handleFinalSubmit} className="btn btn-primary w-md">Add</button>
                                             </div>
                                         </form>
                                     </div>

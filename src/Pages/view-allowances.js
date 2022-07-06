@@ -1,9 +1,26 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function ViewAllowances(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"AllowanceAPI")  
+            .then(result => setData(result.data));  
+    } );
+
+    const deleteAllowance = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"AllowanceAPI/" + id).then(navigate("/ViewAllowances"));  
+    };
+
+    const editAllowance = (id) => {  
+        navigate("/UpdateAllowance/"+id);  
+    };
     return(
         <div>
             <Helmet>
@@ -52,15 +69,17 @@ function ViewAllowances(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>DA</td>
-                                                    <td>No</td>
+                                            {data.map((item, i=1) => {  
+                                                    return<tr key={item.allowanceId}>
+                                                    <td>{++i}</td>
+                                                    <td>{item.allowanceName}</td>
+                                                    <td>{item.isTaxable}</td>
                                                     <td>
-                                                        <Link to="/UpdateAllowance" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button type="button" onClick={() => { editAllowance(item.allowanceId) }} className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</button>&emsp;
+                                                        <button type="button" onClick={() => { deleteAllowance(item.allowanceId) }} className="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
                                                     </td>
                                                 </tr>
+                                            })}
                                             </tbody>
                                         </table>
                                     </div>

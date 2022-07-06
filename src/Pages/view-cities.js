@@ -1,9 +1,26 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
-import {Route, Link} from 'react-router-dom';
+import {Route, Link, useNavigate} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Axios from 'axios'; 
 function ViewCities(){
+    const [data, setData] = useState([]);  
+    let navigate = useNavigate();
+    useEffect(() => {  
+        Axios  
+            .get(process.env.REACT_APP_API+"CityAPI")  
+            .then(result => setData(result.data));  
+    } );
+
+    const deleteCity = (id) => {  
+        // debugger;  
+        Axios.delete(process.env.REACT_APP_API+"CityAPI/" + id).then(navigate("/ViewCities"));  
+        };
+
+    const editCity = (id) => {  
+        navigate("/UpdateCity/"+id);  
+        }; 
     return(
         <div>
             <Helmet>
@@ -52,15 +69,17 @@ function ViewCities(){
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Surat</td>
-                                                    <td>Gujarat</td>
+                                                {data.map((item, i=1) => {  
+                                                    return<tr key={item.cityId}>
+                                                    <td>{++i}</td>
+                                                    <td>{item.cityName}</td>
+                                                    <td>{item.stateName}</td>
                                                     <td>
-                                                        <Link to="/UpdateCity" className="btn btn-outline-primary btn btn-sm waves-effect waves-light">Edit</Link>&emsp;
-                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light">Delete</button>
+                                                        <button className="btn btn-outline-primary btn btn-sm waves-effect waves-light" onClick={() => { editCity(item.cityId) }}>Edit</button>&emsp;
+                                                        <button type="button" class="btn btn-outline-danger btn btn-sm  waves-effect waves-light" onClick={() => { deleteCity(item.cityId) }}>Delete</button>
                                                     </td>
                                                 </tr>
+                                                  })}
                                             </tbody>
                                         </table>
         
